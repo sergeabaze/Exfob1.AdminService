@@ -6,12 +6,17 @@ using Exfob.Models.Administration;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Exfob.Core.Interfaces.Administrations.Securites;
+using System.IO;
+using Microsoft.Data.SqlClient;
+using Exfob.Infrastructure.Repository.Administrations.Securites;
 
 namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administration.Securites
 {
     public class UtilisateurInMemoryRepositoryTests : IClassFixture<SqliteInMemoryGestionBoisContextTest>
     {
         private IGenericRepository<Utilisateur> _repository;
+        private UtilisateurRepository _repository1;
         public SqliteInMemoryGestionBoisContextTest Fixture { get; }
         GestionBoisDataTestesFakes fakeDatas = new GestionBoisDataTestesFakes();
         public UtilisateurInMemoryRepositoryTests(SqliteInMemoryGestionBoisContextTest fixture) => Fixture = fixture;
@@ -22,14 +27,15 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
         {
             //Arrang
             int expected = 1;
+            _repository1 = new UtilisateurRepository(Fixture._connection);
 
-            using (var context = Fixture.CreateContext())
-            {
-                _repository = new GenericRepository<Utilisateur>(context);
+            //using (var context = Fixture.CreateContext())
+           // {
+              //  _repository = new GenericRepository<Utilisateur>(context);
 
                 //Arrange
 
-                var result = await _repository.GetAllAsync();
+                var result = await _repository1.GetAllAsync();
 
                 //Assert
                 Assert.True(result.Any());
@@ -37,7 +43,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
                 Assert.Null(result.First().Profil);
                 Assert.Null(result.First().Langue);
                 Assert.Null(result.First().SiteOperation);
-            }
+           // }
         }
 
         [Fact]
@@ -229,6 +235,8 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             }
         }
 
+
+
         [Fact]
         public async Task DeleteAsync_Should_Return_success_Utilisateur()
         {
@@ -284,5 +292,75 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
                 Assert.Null(await _repository.GetByIdAsync(user1.UtilisateurID));
             }
         }
+    }
+
+    public class UtilisateurInMemoryLoginRepositoryTests : IClassFixture<SqliteInMemoryGestionBoisContextTest>
+    {
+        private IUtilisateurRepository _repository;
+        public UtilisateurInMemoryLoginRepositoryTests()
+        {
+            var projectDir = Directory.GetCurrentDirectory();
+            var configPath = Path.Combine(projectDir, "appsettings.json");
+            var Connectiongg = new SqlConnection(@"data source=CA-L7KB0VN2\SQLEXPRESS;initial catalog=GBRWBD061915;integrated security=True;MultipleActiveResultSets=True;Max Pool Size=500;");
+            Connectiongg.Open();
+            _repository = new UtilisateurRepository(Connectiongg);
+        }
+
+        
+        [Fact(Skip = "non pris en compte")]
+        public async Task LogginAsync_WIth_AuthorizedSitedShould_Return_Object()
+        {
+
+            //act
+            var result = await _repository.GetLoggin("admin.admin", "sa.admin");
+
+            //Assert
+            Assert.NotNull(result);
+           Assert.Equal("admin.admin", result.LoginUtilisateur);
+            Assert.NotNull(result.Profile);
+            Assert.NotNull(result.Profile.Droits);
+            Assert.NotNull(result.Langue);
+            Assert.NotNull(result.SiteOperation);
+            Assert.NotNull(result.SiteOperation.Societe);
+            Assert.NotNull(result.SiteOperationsAuthoriser);
+            
+        }
+
+        [Fact(Skip = "non pris en compte")]
+        public async Task LoginAsync_WithoutSithAuth_Should_Return_Object()
+        {
+
+            //act
+            var result = await _repository.GetLoggin("serges.abaze", "alltech.admin");
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.Profile);
+            Assert.NotNull(result.Profile.Droits);
+            Assert.NotNull(result.Langue);
+            Assert.NotNull(result.SiteOperation);
+            Assert.NotNull(result.SiteOperation.Societe);
+            Assert.Null(result.SiteOperationsAuthoriser);
+
+        }
+
+        [Fact(Skip = "non pris en compte")]
+        public async Task LoginAsync_Error_Should_Return_Null()
+        {
+
+            //act
+            var result = await _repository.GetLoggin("serges", "alltech");
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.Profile);
+            Assert.NotNull(result.Profile.Droits);
+            Assert.NotNull(result.Langue);
+            Assert.NotNull(result.SiteOperation);
+            Assert.NotNull(result.SiteOperation.Societe);
+            Assert.Null(result.SiteOperationsAuthoriser);
+
+        }
+
     }
 }

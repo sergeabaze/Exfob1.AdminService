@@ -86,7 +86,37 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs.BusinessLogic
             return result;
         }
 
-        public async Task<WebApiSingleResponse<UtilisateurRequestReponse>> CreationUtilisateur(UtilisateurCreate model, int siteOperationid)
+        public async  Task<WebApiSingleResponse<UtilisateurForEditReponse>> ObtenireUtilisateurEditParId(int Id, int siteOperationid)
+        {
+            var result = new WebApiSingleResponse<UtilisateurForEditReponse>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+
+            try
+            {
+                var query = await _service.ObtenireUtilisateurEditParId(Id, siteOperationid);
+                if (query == null)
+                {
+                    return CommunValidators.NotFoundRequestMessage(
+                        result, ResourceMessage.ErrurNotFound);
+                }
+
+                result.Model = _mapper.Map<UtilisateurForEditReponse>(query);
+                result.Message = ResourceMessage.Message001;
+            }
+            catch (Exception ex)
+            {
+                result = CommunValidators.ExceptionRequestMessage(
+                     result, ex.Message);
+            }
+            return result;
+        }
+
+
+        public async Task<WebApiSingleResponse<UtilisateurRequestReponse>> CreationUtilisateur(UtilisateurRequestCreate model, int siteOperationid)
         {
             var result = new WebApiSingleResponse<UtilisateurRequestReponse>
             {
@@ -119,7 +149,7 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs.BusinessLogic
         }
 
         public async Task<WebApiSingleResponse<UtilisateurRequestReponse>> MisejourUtilisateur(
-            UtilisateurEdit model,
+            UtilisateurRequestEdit model,
             int siteOperationid,
             int utilisateurid)
         {
@@ -190,6 +220,97 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs.BusinessLogic
             }
             return result;
         }
+
+        public async  Task<WebApiSingleResponse<UtilisateurRequestReponse>> MisejourMotPasse(UtilisateurPassWordRequest request, int utilisateurid)
+        {
+            var result = new WebApiSingleResponse<UtilisateurRequestReponse>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            try
+            {
+
+                if (utilisateurid <= 0)
+                {
+                    return CommunValidators.BadRequestMessage(
+                        result, string.Format(ResourceMessage.Erreur1002, nameof(utilisateurid)));
+
+                }
+
+
+                await _service.MiseJourDuMotDePasse(utilisateurid, request.NewPassWord, request.MisejourPar);
+                result.Model = new UtilisateurRequestReponse { UtilisateurID = utilisateurid };
+                result.Message = ResourceMessage.Message001;
+            }
+            catch (Exception ex)
+            {
+                result = CommunValidators.ExceptionRequestMessage(
+                      result, ex.Message);
+            }
+            return result;
+        }
+
+        public async  Task<WebApiSingleResponse<UtilisateurRequestReponse>> MisejourActivationCompte(UtilisateurActivationRequest request, int utilisateurid)
+        {
+            var result = new WebApiSingleResponse<UtilisateurRequestReponse>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            try
+            {
+
+                if (utilisateurid <= 0)
+                {
+                    return CommunValidators.BadRequestMessage(
+                        result, string.Format(ResourceMessage.Erreur1002, nameof(utilisateurid)));
+
+                }
+
+
+                await _service.MisejourPourActivationDuCompte(utilisateurid, request.EstActif, request.MisejourPar);
+                result.Model = new UtilisateurRequestReponse { UtilisateurID = utilisateurid };
+                result.Message = ResourceMessage.Message001;
+            }
+            catch (Exception ex)
+            {
+                result = CommunValidators.ExceptionRequestMessage(
+                      result, ex.Message);
+            }
+            return result;
+        }
+
+        public async  Task<WebApiSingleResponse<UtilisateurLoginReponse>> ObtenireUtilisateurLogin(UtilisateurLoginEdit request)
+        {
+            var result = new WebApiSingleResponse<UtilisateurLoginReponse>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            try
+            {
+                var query = await _service.ObtenireLoggin(request.Nomutilisateur , request.Motpasse);
+                if (query == null)
+                {
+                    return CommunValidators.NotFoundRequestMessage(
+                        result, ResourceMessage.ErrurNotFound);
+                }
+
+                result.Model = _mapper.Map<UtilisateurLoginReponse>(query);
+                result.Message = ResourceMessage.Message001;
+            }
+            catch (Exception ex)
+            {
+                result = CommunValidators.ExceptionRequestMessage(
+                     result, ex.Message);
+            }
+            return result;
+        }
+
 
         #endregion
     }

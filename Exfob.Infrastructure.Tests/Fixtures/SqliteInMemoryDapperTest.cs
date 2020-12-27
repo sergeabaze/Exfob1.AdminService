@@ -2,15 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exfob.Infrastructure.Tests.Fixtures
 {
-   public  class SqliteInMemoryDapperTest : GestionBoisContextTests, IDisposable
+    public  class SqliteInMemoryDapperTest : GestionBoisContextTests, IDisposable
     {
         private readonly DbConnection _connection;
         public SqliteInMemoryDapperTest()
@@ -20,8 +16,10 @@ namespace Exfob.Infrastructure.Tests.Fixtures
                     .Options)
         {
             Connection = RelationalOptionsExtension.Extract(ContextOptions).Connection;
+            Contexte = new GestionBoisContext(ContextOptions);
         }
         public  DbConnection Connection { get; }
+        public GestionBoisContext Contexte { get; set; }
 
         private static DbConnection CreateInMemoryDatabase()
         {

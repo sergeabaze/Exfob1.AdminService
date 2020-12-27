@@ -1,14 +1,14 @@
 ﻿using Exfob1.Communs;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Exfob1.Models.Adminstrations.Utilisateurs.Request
 {
-    public  class UtilisateurLoginEdit
+    public class UtilisateurActivationRequest
     {
+        public bool  EstActif { get; set; }
 
         [Required(ErrorMessage = MessageValidations.Erreur100)]
-        public string Nomutilisateur { get; set; }
-        [Required(ErrorMessage = MessageValidations.Erreur100)]
-        public string Motpasse { get; set; }
+        public string MisejourPar { get; set; }
     }
 }

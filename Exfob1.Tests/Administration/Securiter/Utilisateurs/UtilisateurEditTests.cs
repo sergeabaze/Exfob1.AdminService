@@ -9,10 +9,10 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
 {
     public  class UtilisateurEditTests
     {
-        private ValidationContext CreateContext(UtilisateurEdit model) => new ValidationContext(model, null, null);
+        private ValidationContext CreateContext(UtilisateurRequestEdit model) => new ValidationContext(model, null, null);
 
         [Theory, UnitTestConventions]
-        public void Should_Return_TrueValid_WhenRulesOk(UtilisateurEdit sut)
+        public void Should_Return_TrueValid_WhenRulesOk(UtilisateurRequestEdit sut)
         {
 
             var results = new List<ValidationResult>();
@@ -21,7 +21,7 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_ProfilID_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_ProfilID_Invald(UtilisateurRequestEdit sut)
         {
             sut.ProfilID = 0;
             bool expected = false;
@@ -41,7 +41,7 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_LangueID_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_LangueID_Invald(UtilisateurRequestEdit sut)
         {
             sut.LangueID = 0;
             bool expected = false;
@@ -61,43 +61,43 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_Nom_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_Nom_Invald(UtilisateurRequestEdit sut)
         {
             sut.Nom = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurEdit.Nom))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestEdit.Nom))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_LoginUtilisateur_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_LoginUtilisateur_Invald(UtilisateurRequestEdit sut)
         {
             sut.LoginUtilisateur = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurEdit.LoginUtilisateur))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestEdit.LoginUtilisateur))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_Email_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_Email_Invald(UtilisateurRequestEdit sut)
         {
             sut.Email = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurEdit.Email))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestEdit.Email))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_MiseJourPar_Invald(UtilisateurEdit sut)
+        public void Should_Return_False_When_MiseJourPar_Invald(UtilisateurRequestEdit sut)
         {
             sut.MiseJourPar  = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurEdit.MiseJourPar))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestEdit.MiseJourPar))));
         }
     }
 }

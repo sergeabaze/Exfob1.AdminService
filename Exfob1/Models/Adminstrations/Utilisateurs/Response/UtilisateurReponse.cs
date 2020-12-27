@@ -49,14 +49,14 @@ namespace Exfob1.Models.Adminstrations.Utilisateurs.Response
       
         public string MiseJourPar { get; set; }
 
-      //  public virtual Langue Langue { get; set; }
+        public  Langue Langue { get; set; }
 
-      //  public virtual Profil Profil { get; set; }
+       public  Profil Profil { get; set; }
 
        // [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
        // public  List<SiteAutorise> SiteAutorises { get; set; }
 
-       // public  SiteOperation SiteOperation { get; set; }
+        public  SiteOperation SiteOperation { get; set; }
     }
    /* public class UtilisateurEditReponse
     {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exfob1.Models.Adminstrations.Utilisateurs.Request
 {
-    public   class UtilisateurCreate
+    public   class UtilisateurRequestCreate
     {
       
         

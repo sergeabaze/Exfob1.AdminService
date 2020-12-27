@@ -13,7 +13,7 @@ namespace Exfob.Infrastructure.Tests.Fixtures
 {
     public class SqliteInMemoryGestionBoisContextTest : GestionBoisContextTests, IDisposable
     {
-        private readonly DbConnection _connection;
+        public  DbConnection _connection;
         public   Fixture _fixture;
         public SqliteInMemoryGestionBoisContextTest()
             : base(

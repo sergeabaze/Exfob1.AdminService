@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Exfob.Models\Exfob.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Utilisateur\" />
+  </ItemGroup>
+
 </Project>

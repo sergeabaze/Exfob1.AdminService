@@ -52,11 +52,29 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs
         /// <returns>retourne objet</returns>
         /// <response code="200">Si retourne un objet </response>
         /// <response code="404">Si le lobjet nexiste pas</response>
-        [HttpGet("id/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<WebApiSingleResponse<UtilisateurReponse>>> obtenireParIdAsync(int id)
         {
             var response = await _utilisateurBLL.ObtenireUtilisateurParId(id)
+                .ConfigureAwait(false);
+
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// obtenire par id
+        /// </summary>
+        /// <param name="id">id utilisateur</param>
+        /// <param name="societeid">id utilisateur</param>
+        /// <returns>retourne objet</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("edit/{id}/{societeid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiSingleResponse<UtilisateurReponse>>> ObtenireEditionParIdAsync(int id, int societeid)
+        {
+            var response = await _utilisateurBLL.ObtenireUtilisateurEditParId(id, societeid)
                 .ConfigureAwait(false);
 
             return response.ToHttpResponse();
@@ -73,7 +91,7 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs
         [ApiConventionMethod(typeof(CustomsConventions),
           nameof(CustomsConventions.Insert))]
         public async Task<ActionResult<WebApiSingleResponse<UtilisateurRequestReponse>>> CreationAsync(
-            int siteoperationid, [FromBody] UtilisateurCreate request)
+            int siteoperationid, [FromBody] UtilisateurRequestCreate request)
         {
 
             if (!ModelState.IsValid)
@@ -92,6 +110,35 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs
             return response.ToHttpResponse();
         }
 
+
+        /// <summary>
+        /// fonction de login
+        /// </summary>
+        /// <param name="request">objet</param>
+        /// <returns>objet connecter</returns>
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ApiConventionMethod(typeof(CustomsConventions),
+          nameof(CustomsConventions.Insert))]
+        public async Task<ActionResult<WebApiSingleResponse<UtilisateurLoginReponse>>> CreationAsync( [FromBody] UtilisateurLoginEdit request)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var repo = new WebApiListResponse<UtilisateurLoginReponse>
+                {
+                    CodeMessage = StatusCodes.Status400BadRequest,
+                    IsError = true,
+                    ErrorMessage = string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
+                };
+                return repo.ToHttpResponse();
+            }
+            var response = await _utilisateurBLL.ObtenireUtilisateurLogin(request)
+            .ConfigureAwait(false);
+
+            return response.ToHttpResponse();
+        }
+
         /// <summary>
         /// fonction de misejour
         /// </summary>
@@ -103,7 +150,7 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ApiConventionMethod(typeof(CustomsConventions),
           nameof(CustomsConventions.Insert))]
-        public async Task<ActionResult<WebApiSingleResponse<UtilisateurRequestReponse>>> MisejourAsync(int siteoperationid, int utilisateurid, [FromBody] UtilisateurEdit request)
+        public async Task<ActionResult<WebApiSingleResponse<UtilisateurRequestReponse>>> MisejourAsync(int siteoperationid, int utilisateurid, [FromBody] UtilisateurRequestEdit request)
         {
 
             if (!ModelState.IsValid)
@@ -117,6 +164,64 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs
                 return repo.ToHttpResponse();
             }
             var response = await _utilisateurBLL.MisejourUtilisateur(request, siteoperationid, utilisateurid)
+            .ConfigureAwait(false);
+
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// fonction de misejour mt passe utilisateur
+        /// </summary>
+        /// <param name="utilisateurid">id</param>
+        /// <param name="request">objet</param>
+        /// <returns>objet misejour</returns>
+        [HttpPut("editionmotpasse/{utilisateurid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ApiConventionMethod(typeof(CustomsConventions),
+          nameof(CustomsConventions.Insert))]
+        public async Task<ActionResult<WebApiSingleResponse<UtilisateurRequestReponse>>> MisejourmotPasseAsync(int utilisateurid, [FromBody] UtilisateurPassWordRequest request)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var repo = new WebApiListResponse<UtilisateurRequestReponse>
+                {
+                    CodeMessage = StatusCodes.Status400BadRequest,
+                    IsError = true,
+                    ErrorMessage = string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
+                };
+                return repo.ToHttpResponse();
+            }
+            var response = await _utilisateurBLL.MisejourMotPasse(request, utilisateurid)
+            .ConfigureAwait(false);
+
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// fonction de activation/desactivation compte
+        /// </summary>
+        /// <param name="utilisateurid">id</param>
+        /// <param name="request">objet</param>
+        /// <returns>objet misejour</returns>
+        [HttpPut("editionstatustcompte/{utilisateurid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ApiConventionMethod(typeof(CustomsConventions),
+          nameof(CustomsConventions.Insert))]
+        public async Task<ActionResult<WebApiSingleResponse<UtilisateurRequestReponse>>> MActivationdeactivationcompteAsync(int utilisateurid, [FromBody] UtilisateurActivationRequest request)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var repo = new WebApiListResponse<UtilisateurRequestReponse>
+                {
+                    CodeMessage = StatusCodes.Status400BadRequest,
+                    IsError = true,
+                    ErrorMessage = string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
+                };
+                return repo.ToHttpResponse();
+            }
+            var response = await _utilisateurBLL.MisejourActivationCompte(request, utilisateurid)
             .ConfigureAwait(false);
 
             return response.ToHttpResponse();

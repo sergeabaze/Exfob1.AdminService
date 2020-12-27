@@ -11,19 +11,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using static Dapper.SqlMapper;
+using Exfob.Core.Interfaces.Administrations.Securites;
+using Exfob.Infrastructure.Repository.Administrations.Securites;
 
 namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administration.Securites
 {
     public class ProfileInMemoryRepositoryTests : IClassFixture<SqliteInMemoryDapperTest>
     {
 
-        private IGenericDapperRepository<Profil> _repository;
+        private IProfileRepository _repository;
         GestionBoisDataTestesFakes fakeDatas;
         public SqliteInMemoryDapperTest Context { get; }
         public ProfileInMemoryRepositoryTests(SqliteInMemoryDapperTest contexte)
         {
             Context = contexte;
-            _repository = new GenericDapperRepository<Profil>(Context.Connection);
+            _repository = new ProfileRepository(Context.Contexte);
             fakeDatas = new GestionBoisDataTestesFakes();
         }
 
@@ -37,8 +39,8 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             // Act
             var id = await _repository.AddAsync(entite);
 
-            object parameters = new { ProfilID = entite.ProfilID };
-            var result2 = await _repository.FindAsync(parameters);
+           // object parameters = new { ProfilID = entite.ProfilID };
+            var result2 = await _repository.GetByIdAsync(entite.ProfilID);
 
             //Assert
             Assert.Equal(entite.Libelle, result2.Libelle);
@@ -58,7 +60,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             var id = await _repository.AddAsync(entite);
             object parameters = new { id = entite.ProfilID };
 
-            var result = await _repository.GetDataAsync(query, parameters);
+            var result = await _repository.FromSqlRawAsync(query, parameters);
 
             //Assert
             Assert.True(result.Any());
@@ -76,11 +78,11 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             object inParameters = new { entite.Libelle };
 
             // Act
-            var ProfilID = await _repository.AddScalarAsync(insQuery, inParameters);
+            var ProfilID = await _repository.FromSqlRawAsync(insQuery, inParameters);
 
 
             object parameters = new { ProfilID };
-            var result = await _repository.GetDataAsync(query, parameters);
+            var result = await _repository.FromSqlRawAsync(query, parameters);
 
             //Assert
             Assert.True(result.Any());
@@ -95,7 +97,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             await _repository.AddAsync(entite);
             object parameters = new { ProfilID = entite.ProfilID };
 
-            var entiteUpdate = await _repository.FindAsync(parameters);
+            var entiteUpdate = await _repository.FindAsync(x => x.ProfilID == entite.ProfilID);
             entiteUpdate.Libelle = "ssssssssss5";
             object pk = new { ProfilID = entiteUpdate.ProfilID };
             // Act
@@ -103,20 +105,20 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
 
             parameters = new { ProfilID = entiteUpdate.ProfilID };
 
-            var result = await _repository.FindAsync(parameters);
+            var result = await _repository.FindAsync(x => x.ProfilID == entite.ProfilID);
 
             //Assert
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void GetData_ById_Should_Return_Object()
+        public async Task GetData_ById_Should_Return_Object()
         {
             //Arrang
             object parameters = new { id = 1 };
             string query = "SELECT * FROM Profil WHERE ProfilID = @id";
             // Act
-            var result = _repository.GetData(query, parameters);
+            var result = await  _repository.FromSqlRawAsync(query, parameters);
 
             //Assert
             Assert.True(result.Any());
@@ -137,10 +139,10 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
         public void FindA_Should_Return_Object()
         {
             //Arrange
-            object parameters = new { ProfilID = 1 };
+           // object parameters = new { ProfilID = 1 };
 
             // Act
-            var result = _repository.Find(parameters);
+            var result = _repository.FindAsync(x => x.ProfilID ==1);
 
             //Assert
             Assert.NotNull(result);

@@ -9,10 +9,10 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
 {
     public  class UtilisateurCeateTests
     {
-        private ValidationContext CreateContext(UtilisateurCreate model) => new ValidationContext(model, null, null);
+        private ValidationContext CreateContext(UtilisateurRequestCreate model) => new ValidationContext(model, null, null);
 
         [Theory, UnitTestConventions]
-        public void Should_Return_TrueValid_WhenRulesOk(UtilisateurCreate sut)
+        public void Should_Return_TrueValid_WhenRulesOk(UtilisateurRequestCreate sut)
         {
 
             var results = new List<ValidationResult>();
@@ -21,7 +21,7 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_ProfilID_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_ProfilID_Invald(UtilisateurRequestCreate sut)
         {
             sut.ProfilID = 0;
             bool expected = false;
@@ -41,7 +41,7 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_LangueID_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_LangueID_Invald(UtilisateurRequestCreate sut)
         {
             sut.LangueID = 0;
             bool expected = false;
@@ -61,43 +61,43 @@ namespace Exfob1.Tests.Administration.Securiter.Utilisateurs
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_Nom_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_Nom_Invald(UtilisateurRequestCreate sut)
         {
             sut.Nom = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurCreate.Nom))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestCreate.Nom))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_LoginUtilisateur_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_LoginUtilisateur_Invald(UtilisateurRequestCreate sut)
         {
             sut.LoginUtilisateur = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurCreate.LoginUtilisateur))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestCreate.LoginUtilisateur))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_Email_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_Email_Invald(UtilisateurRequestCreate sut)
         {
             sut.Email = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurCreate.Email))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestCreate.Email))));
         }
 
         [Theory, UnitTestConventions]
-        public void Should_Return_False_When_MiseJourPar_Invald(UtilisateurCreate sut)
+        public void Should_Return_False_When_MiseJourPar_Invald(UtilisateurRequestCreate sut)
         {
             sut.CreerPar = null;
             var results = new List<ValidationResult>();
 
             Assert.False(Validator.TryValidateObject(sut, CreateContext(sut), results));
-            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurCreate.CreerPar))));
+            Assert.NotNull(results.FirstOrDefault(r => r.MemberNames.Contains(nameof(UtilisateurRequestCreate.CreerPar))));
         }
     }
 }

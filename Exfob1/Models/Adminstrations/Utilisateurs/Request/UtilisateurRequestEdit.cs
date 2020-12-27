@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Exfob1.Models.Adminstrations.Utilisateurs.Request
 {
-    public  class UtilisateurEdit
+    public  class UtilisateurRequestEdit
     {
        
         public int? SiegeID { get; set; }
