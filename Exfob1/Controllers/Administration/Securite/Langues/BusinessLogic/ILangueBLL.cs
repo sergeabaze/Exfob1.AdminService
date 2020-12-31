@@ -1,6 +1,5 @@
 ﻿using Exfob1.Models;
-using Exfob1.Models.Adminstrations.Langues.Request;
-using Exfob1.Models.Adminstrations.Langues.Response;
+using Exfob1.Models.Adminstrations;
 using System.Threading.Tasks;
 
 namespace Exfob1.Controllers.Administration.Securite.Langues.BusinessLogic
