@@ -2,7 +2,7 @@
 using Exfob1.Controllers.Administration.Securite.Langues;
 using Exfob1.Controllers.Administration.Securite.Langues.BusinessLogic;
 using Exfob1.Models;
-using Exfob1.Models.Adminstrations.Langues.Response;
+using Exfob1.Models.Adminstrations;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
