@@ -105,6 +105,7 @@ namespace Exfob1
                 app.UseSwaggerUI(c => {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expploitation Forestiere Service REst Administration v1");
                     c.RoutePrefix = string.Empty;
+                    
                 }) ;
             }
 
