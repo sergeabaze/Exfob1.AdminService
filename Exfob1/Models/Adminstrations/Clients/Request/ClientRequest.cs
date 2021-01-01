@@ -5,13 +5,16 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class ClientRequest
 	{
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperationID { get; set; }
 		public double  SiegeID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  TypeclientID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public double  PaysID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  VilleID { get; set; }
 		public string  Code { get; set; }
 		public string  Nomclient { get; set; }

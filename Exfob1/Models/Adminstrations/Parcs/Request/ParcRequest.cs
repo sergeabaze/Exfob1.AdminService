@@ -5,21 +5,24 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class ParcRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperattionID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  NatureParcID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  CodeParc { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public bool  CodeVolume { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  CodeArbre { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  CodeStockSechoir { get; set; }
 		public string  CodeParcBois { get; set; }
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
 		public int  LieuTransitID { get; set; }
 	}
 }

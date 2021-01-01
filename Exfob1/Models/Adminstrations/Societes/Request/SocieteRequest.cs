@@ -5,17 +5,17 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class SocieteRequest
 	{
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public double  SiegeID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Code { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Description { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  BoitePostale { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Adresse { get; set; }
 		public string  Ville { get; set; }
 		public string  NatureActivite { get; set; }
@@ -28,7 +28,7 @@ namespace Exfob1.Models.Adminstrations
 		public byte[]  Logo { get; set; }
 		public DateTime  DateCreation { get; set; }
 		public string  NumeroCompte { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public bool  EstPeriodeCloture { get; set; }
 	}
 }

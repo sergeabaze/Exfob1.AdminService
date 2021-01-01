@@ -5,13 +5,16 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class EssenceRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  ClasseEssenceID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SocieteID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  CategorieEssenceID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
 		public string  NomScientifique { get; set; }
 		public string  CodeMesurage { get; set; }
@@ -30,7 +33,7 @@ namespace Exfob1.Models.Adminstrations
 		public float  RendementProduitRC1 { get; set; }
 		public float  SeuilLongueurEntreeScie { get; set; }
 		public float  PrixFob { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Code { get; set; }
 	}
 }

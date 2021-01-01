@@ -5,11 +5,13 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class DensiteBoisRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  EssenceID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  ProduitID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public float  Libelle { get; set; }
 	}
 }

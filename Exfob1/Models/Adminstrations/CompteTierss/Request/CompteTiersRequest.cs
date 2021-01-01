@@ -5,6 +5,7 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class CompteTiersRequest
 	{
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
 		public int  SocieteID { get; set; }
 		public double  PaysID { get; set; }
 		public string  NumeroCompte { get; set; }

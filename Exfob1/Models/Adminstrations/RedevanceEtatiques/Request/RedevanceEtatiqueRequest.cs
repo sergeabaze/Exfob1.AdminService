@@ -5,11 +5,13 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class RedevanceEtatiqueRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  PortID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperationID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Intitule { get; set; }
 		public double  TriAffic { get; set; }
 	}

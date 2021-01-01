@@ -1,14 +1,12 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
 using Exfob1.Communs;
 using System.ComponentModel.DataAnnotations;
 namespace Exfob1.Models.Adminstrations
 {
-	public  class ParcellePermisCoupeEdit: ParcellePermisCoupeRequest
+	public  class StockArbreForetEdit: StockArbreForetRequest
 	{
 		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
-		public int ParcellePermisCoupeID { get; set; }
-		List<ChantierRequest>  Chantiers { get; set; }
+		public int StockArbreForetID { get; set; }
 	}
 }

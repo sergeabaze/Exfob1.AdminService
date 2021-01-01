@@ -5,9 +5,9 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class TrancheHoraireRequest
 	{
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public DateTime  DateDebut { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public DateTime  Datefin { get; set; }
 		public string  Libelle { get; set; }
 	}

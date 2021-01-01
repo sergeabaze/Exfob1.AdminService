@@ -5,11 +5,12 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class ClientAdresseRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  ClientID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Code { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
 		public string  Email { get; set; }
 		public string  Telephone { get; set; }

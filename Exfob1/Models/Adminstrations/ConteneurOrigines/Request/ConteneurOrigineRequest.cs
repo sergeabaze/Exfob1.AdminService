@@ -5,9 +5,10 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class ConteneurOrigineRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  ContenaireOrigineID { get; set; }
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
 	}
 }

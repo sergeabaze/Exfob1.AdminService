@@ -5,7 +5,7 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class ComptabiliteRequest
 	{
-		[Required]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public string  Libelle { get; set; }
 	}
 }

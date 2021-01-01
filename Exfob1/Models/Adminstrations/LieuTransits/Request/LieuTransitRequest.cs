@@ -5,9 +5,11 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class LieuTransitRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperattionID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  PortID { get; set; }
 		public string  TypeSiteParc { get; set; }
 		public string  Libelle { get; set; }

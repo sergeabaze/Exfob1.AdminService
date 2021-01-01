@@ -5,9 +5,11 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class MoyenTransportRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperationID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  TransporteurtID { get; set; }
 		public string  NumeroTracteur { get; set; }
 		public string  NumeroRemorque { get; set; }

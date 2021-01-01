@@ -5,9 +5,11 @@ namespace Exfob1.Models.Adminstrations
 {
 	public  class EquipeRequest
 	{
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  SiteOperationID { get; set; }
-		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = MessageValidations.Erreur100)]
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
 		public int  TypeEquipeID { get; set; }
 		public string  Code { get; set; }
 		public string  Libelle { get; set; }
