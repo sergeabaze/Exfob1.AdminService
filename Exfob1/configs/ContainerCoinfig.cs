@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Exfob.Core.Interfaces.Administrations;
 using Exfob.Core.Interfaces.Administrations.Securites;
 using Exfob.Core.Services.Administration;
+using Exfob.Infrastructure.Repository.Administrations;
 using Exfob.Infrastructure.Repository.Administrations.Securites;
 using Exfob.Service.Administration.Securiter;
 using Exfob.Service.Traducteurs.Administration.Securiter;
@@ -29,6 +31,10 @@ namespace Exfob1.configs
             services.AddTransient<IProfileRepository, ProfileRepository>();
             services.AddTransient<IUtilisateurRepository>(provider => {
                 return new UtilisateurRepository(provider.GetRequiredService<SqlConnection>());
+            });
+
+            services.AddTransient<ILookUpRepository>(provider => {
+                return new LookUpRepository(provider.GetRequiredService<SqlConnection>());
             });
 
             services.AddTransient<ILangueService, LangueService>();
