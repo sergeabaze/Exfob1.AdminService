@@ -51,7 +51,7 @@ namespace Exfob1.Controllers.Administration.Securite.Langues
         /// <returns>retourne objet</returns>
         /// <response code="200">Si retourne un objet </response>
         /// <response code="404">Si le lobjet nexiste pas</response>
-        [HttpGet("id/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<WebApiSingleResponse<LangueReponse>>> obtenireParIdAsync(int id)
         {
@@ -96,7 +96,7 @@ namespace Exfob1.Controllers.Administration.Securite.Langues
         /// <param name="langueid">id</param>
         /// <param name="request">objet</param>
         /// <returns>objet misejour</returns>
-        [HttpPut("edit/{langueid}")]
+        [HttpPut("edition/{langueid}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ApiConventionMethod(typeof(CustomsConventions),
           nameof(CustomsConventions.Insert))]
