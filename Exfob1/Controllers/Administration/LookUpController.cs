@@ -225,7 +225,7 @@ namespace Exfob1.Controllers.Administration
         }
 
         /// <summary>
-        /// liste site operations
+        /// liste site type materiels
         /// </summary>
         /// <returns>retourne collection</returns>
         /// <response code="200">Si retourne un objet </response>
@@ -242,6 +242,36 @@ namespace Exfob1.Controllers.Administration
             };
 
             response.Model = await _repository.GetTypeMaterielListe()
+               .ConfigureAwait(false);
+            if (!response.Model.Any())
+            {
+                response.CodeMessage = StatusCodes.Status404NotFound;
+                response.IsError = true;
+                response.ErrorMessage = ResourceMessage.ErrurNotFound;
+
+            }
+
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// liste societes
+        /// </summary>
+        /// <returns>retourne collection</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("societelists")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiListResponse<SocieteForListe>>> SocieteForListeListeAsync()
+        {
+            var response = new WebApiListResponse<SocieteForListe>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+
+            };
+
+            response.Model = await _repository.GetSocieteListe()
                .ConfigureAwait(false);
             if (!response.Model.Any())
             {
