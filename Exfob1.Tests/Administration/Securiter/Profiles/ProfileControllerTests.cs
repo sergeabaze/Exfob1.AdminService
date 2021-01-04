@@ -2,7 +2,7 @@
 using Exfob1.Controllers.Administration.Securite.Profiles;
 using Exfob1.Controllers.Administration.Securite.Profiles.BusinessLogic;
 using Exfob1.Models;
-using Exfob1.Models.Adminstrations.Profiles.ResPonse;
+using Exfob1.Models.Adminstrations;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

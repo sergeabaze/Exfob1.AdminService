@@ -1,5 +1,4 @@
-﻿using Exfob1.Models.Adminstrations.Langues.Request;
-using Exfob1.Models.Adminstrations.Profiles.Request;
+﻿using Exfob1.Models.Adminstrations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +6,7 @@ using Xunit;
 
 namespace Exfob1.Tests.Administration.Securiter.Profiles
 {
-   public  class ProfileEditTests
+    public  class ProfileEditTests
     {
         private ValidationContext CreateContext(ProfileEdit model) => new ValidationContext(model, null, null);
 

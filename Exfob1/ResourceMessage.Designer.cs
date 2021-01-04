@@ -61,6 +61,15 @@ namespace Exfob1 {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le champ est un champ requis.
+        /// </summary>
+        public static string Erreur100 {
+            get {
+                return ResourceManager.GetString("Erreur100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Le {0} est un champ requis !.
         /// </summary>
         public static string Erreur1002 {
