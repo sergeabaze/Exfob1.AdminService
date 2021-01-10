@@ -58,7 +58,7 @@ namespace Exfob1
                 services.AddDbContext<GestionBoisContext>(opts =>
                  opts.UseSqlServer(Configuration["ConnectionString:exfobDevDb"],
                  providerOptions => providerOptions.EnableRetryOnFailure())
-           );
+                 );
 
                 services.AddScoped(db =>
                 {
@@ -71,20 +71,18 @@ namespace Exfob1
             else
             {
                 services.AddDbContext<GestionBoisContext>(opts =>
-                  opts.UseSqlServer(Configuration["ConnectionString:QuizzSqlAzure"],
+                  opts.UseSqlServer(Configuration["ConnectionString:exfobDevDbSqlAzure"],
                   providerOptions => providerOptions.EnableRetryOnFailure())
                 );
 
                 services.AddScoped(db =>
                 {
-                    var connection = new SqlConnection(Configuration["ConnectionString:QuizzSqlAzure"]);
+                    var connection = new SqlConnection(Configuration["ConnectionString:exfobDevDbSqlAzure"]);
                     connection.Open();
                     return connection;
                 });
 
             }
-
-
 
             services.AddTransient(typeof(IGenericDapperRepository<>), typeof(GenericDapperRepository<>));
 
@@ -124,7 +122,8 @@ namespace Exfob1
 
                 });
             }
-
+           
+           
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -135,6 +134,7 @@ namespace Exfob1
             {
                 endpoints.MapControllers();
             });
+           
         }
     }
 }
