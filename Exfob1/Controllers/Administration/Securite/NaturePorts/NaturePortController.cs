@@ -1,0 +1,131 @@
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
+using Exfob1.Models.Adminstrations;
+using Exfob1.Conventions;
+using Exfob1.Models;
+namespace Exfob1.Controllers.Administration
+{	[Route("api/natureports")]
+	[ApiController]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	public class NaturePortController : ControllerBase
+	{
+
+		private readonly INaturePortBLL _natureportBLL;
+		private readonly ILogger<NaturePortController> _logger;
+		public NaturePortController(INaturePortBLL natureportBLL, ILogger<NaturePortController> logger)
+		{
+			_natureportBLL = natureportBLL ?? throw new ArgumentNullException(nameof(natureportBLL));
+			_logger = logger;
+		}
+
+		/// <summary>
+		/// liste
+		/// </summary>
+		/// <param name="cancellationToken"></param>
+		/// <returns>retourne collection</returns>
+		[HttpGet("list")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<WebApiListResponse<NaturePortListe>>> obtenireListeAsync(CancellationToken cancellationToken)
+		{
+			var response = await _natureportBLL.ObtenireNaturePortListe()
+				.ConfigureAwait(false);
+
+			return response.ToHttpResponse();
+		}
+
+		/// <summary>
+		/// obtenire par id
+		/// </summary>
+		/// <param name="id">id natureport</param>
+		/// <returns>retourne objet</returns>
+		/// <response code="200">Si retourne un objet </response>
+		/// <response code="404">Si le l'objet n'existe pas</response>
+		[HttpGet("{id}")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<WebApiSingleResponse<NaturePortReponse>>> obtenireParIdAsync(int id)
+		{
+			var response = await _natureportBLL.ObtenireNaturePortParId(id)
+				.ConfigureAwait(false);
+
+			return response.ToHttpResponse();
+		}
+
+		/// <summary>
+		/// fonction de création
+		/// </summary>
+		/// <param name="request">objet</param>
+		/// <returns>objet créer</returns>
+		[HttpPost("creation")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ApiConventionMethod(typeof(CustomsConventions),
+			nameof(CustomsConventions.Insert))]
+		public async Task<ActionResult<WebApiSingleResponse<NaturePortReponse>>> CreationAsync([FromBody] NaturePortRequest request)
+		{
+
+			if (!ModelState.IsValid)
+			{
+				var repo = new WebApiListResponse<NaturePortReponse>
+				{
+					CodeMessage = StatusCodes.Status400BadRequest,
+					IsError = true,
+					ErrorMessage = string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
+				};
+
+				return repo.ToHttpResponse();
+			}
+			var response = await _natureportBLL.CreationNaturePort(request)
+				.ConfigureAwait(false);
+
+			return response.ToHttpResponse();
+		}
+
+		/// <summary>
+		/// fonction de mise à jour
+		/// </summary>
+		/// <param name="natureportid">id</param>
+		/// <param name="request">objet</param>
+		[HttpPut("edition/{natureportid}")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ApiConventionMethod(typeof(CustomsConventions),
+			nameof(CustomsConventions.Insert))]
+		public async Task<ActionResult<WebApiSingleResponse<NaturePortReponse>>> MisejourAsync(int natureportid, [FromBody] NaturePortEdit request)
+		{
+			if (!ModelState.IsValid)
+			{
+				var repo = new WebApiListResponse<NaturePortReponse>
+				{
+					CodeMessage = StatusCodes.Status400BadRequest,
+					IsError = true,
+					ErrorMessage = string.Join(";", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
+				};
+				return repo.ToHttpResponse();
+			}
+			var response = await _natureportBLL.MisejourNaturePort(request)
+			    .ConfigureAwait(false);
+
+			return response.ToHttpResponse();
+		}
+
+		/// <summary>
+		/// fonction de suppression
+		/// </summary>
+		/// <param name="natureportid">id</param>
+		/// <returns>status</returns>
+		[HttpDelete("suppression/{natureportid}")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ApiConventionMethod(typeof(CustomsConventions),
+		       nameof(CustomsConventions.Insert))]
+		public async Task<ActionResult<WebApiSingleResponse<NaturePortReponse>>> SuppressionAsync(int natureportid)
+		{
+			var response = await _natureportBLL.SuppressionNaturePort(natureportid)
+				.ConfigureAwait(false);
+
+			return response.ToHttpResponse();
+		}
+	}
+}

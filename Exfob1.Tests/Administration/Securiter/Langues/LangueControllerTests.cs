@@ -1,6 +1,5 @@
 ﻿using AutoFixture.Xunit2;
-using Exfob1.Controllers.Administration.Securite.Langues;
-using Exfob1.Controllers.Administration.Securite.Langues.BusinessLogic;
+using Exfob1.Controllers.Administration;
 using Exfob1.Models;
 using Exfob1.Models.Adminstrations;
 using FluentAssertions;
