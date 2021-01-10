@@ -15,7 +15,7 @@ namespace Exfob.Models.CustomModels
         public LangueLoginModel Langue { get; set; }
         public ProfileLoginModel Profile { get; set; }
         public SiteOperationLoginModel SiteOperation { get; set; }
-        public List<SiteOperationsAuthorizerLoginModel> SiteOperationsAuthoriser { get; set; }
+        public List<SiteOperationsAuthorizerLoginModel> SiteOperationsAuthorises { get; set; }
 
     }
 }

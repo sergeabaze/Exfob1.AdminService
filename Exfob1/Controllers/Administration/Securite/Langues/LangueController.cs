@@ -35,8 +35,24 @@ namespace Exfob1.Controllers.Administration
 			var response = await _langueBLL.ObtenireLangueListe()
 				.ConfigureAwait(false);
 
+<<<<<<< HEAD
 			return response.ToHttpResponse();
 		}
+=======
+        /// <summary>
+        /// obtenire par id
+        /// </summary>
+        /// <param name="id">id langue</param>
+        /// <returns>retourne objet</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiSingleResponse<LangueReponse>>> obtenireParIdAsync(int id)
+        {
+            var response = await _langueBLL.ObtenireLangueParId(id)
+                .ConfigureAwait(false);
+>>>>>>> fd1d453f89614d20d2c78c3655e235df17810d96
 
 		/// <summary>
 		/// obtenire par id
@@ -81,8 +97,23 @@ namespace Exfob1.Controllers.Administration
 			var response = await _langueBLL.CreationLangue(request)
 				.ConfigureAwait(false);
 
+<<<<<<< HEAD
 			return response.ToHttpResponse();
 		}
+=======
+        /// <summary>
+        /// fonction de misejour
+        /// </summary>
+        /// <param name="langueid">id</param>
+        /// <param name="request">objet</param>
+        /// <returns>objet misejour</returns>
+        [HttpPut("edition/{langueid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ApiConventionMethod(typeof(CustomsConventions),
+          nameof(CustomsConventions.Insert))]
+        public async Task<ActionResult<WebApiSingleResponse<LangueReponse>>> MisejourAsync(int langueid, [FromBody] LangueEdit request)
+        {
+>>>>>>> fd1d453f89614d20d2c78c3655e235df17810d96
 
 		/// <summary>
 		/// fonction de mise à jour

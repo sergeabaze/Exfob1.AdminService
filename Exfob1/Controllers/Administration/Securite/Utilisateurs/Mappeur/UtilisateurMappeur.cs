@@ -11,7 +11,11 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs.Mappeur
         public UtilisateurMappeur()
         {
 #pragma warning disable 1591
-            CreateMap<Utilisateur, UtilisateurList>();
+            CreateMap<Utilisateur, UtilisateurList>()
+                .ForMember(dest => dest.Langue , opt=> opt.MapFrom(src => src.Langue.Libelle ))
+                 .ForMember(dest => dest.profile, opt=> opt.MapFrom(src=> src.Profil.Libelle))
+                ;
+
             CreateMap<Utilisateur, UtilisateurReponse>();
             CreateMap<UtilisateurEdit, Utilisateur>();
             CreateMap<UtilisateurRequestCreate, Utilisateur>();
@@ -26,6 +30,7 @@ namespace Exfob1.Controllers.Administration.Securite.Utilisateurs.Mappeur
             CreateMap<SiteOperationLoginModel, SiteOperationLoginReponse>();
             CreateMap<SiegeLoginModel, SiegeLoginReponse>();
             CreateMap<SocieteLoginModel, SocieteLoginReponse>();
+            //SiteOperationsAuthorizerLoginModel;SiteOperationsAuthorizerLoginReponse
             CreateMap<SiteOperationsAuthorizerLoginModel, SiteOperationsAuthorizerLoginReponse>();
             CreateMap<ProfileAuthorizerLoginModel, ProfileAuthorizerLoginReponse>();
             CreateMap<DroitsAuthorizerLoginModel, DroitsAuthorizerLoginReponse>();

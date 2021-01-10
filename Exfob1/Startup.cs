@@ -5,41 +5,36 @@ using Exfob1.configs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Exfob1
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        private readonly IWebHostEnvironment _env;
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(setupAction => 
+            services.AddMvc(setupAction =>
             {
                 setupAction.Filters.Add
                 (
-                  new  ProducesResponseTypeAttribute(StatusCodes.Status200OK));
+                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
                 setupAction.Filters.Add
                 (
                   new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
@@ -58,28 +53,48 @@ namespace Exfob1
 
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.ServiceMapping();
-
-            // IServiceCollection serviceCollections =
-            services.AddDbContext<GestionBoisContext>(opts =>
-            opts.UseSqlServer(Configuration["ConnectionString:exfobDevDb"],
-                providerOptions => providerOptions.EnableRetryOnFailure())
-            );
-
-            services.AddScoped(db =>
+            if (_env.IsDevelopment())
             {
-                var connection = new SqlConnection(Configuration["ConnectionString:exfobDevDb"]);
-                connection.Open();
-                return connection;
-            });
+                services.AddDbContext<GestionBoisContext>(opts =>
+                 opts.UseSqlServer(Configuration["ConnectionString:exfobDevDb"],
+                 providerOptions => providerOptions.EnableRetryOnFailure())
+           );
+
+                services.AddScoped(db =>
+                {
+                    var connection = new SqlConnection(Configuration["ConnectionString:exfobDevDb"]);
+                    connection.Open();
+                    return connection;
+                });
+
+            }
+            else
+            {
+                services.AddDbContext<GestionBoisContext>(opts =>
+                  opts.UseSqlServer(Configuration["ConnectionString:QuizzSqlAzure"],
+                  providerOptions => providerOptions.EnableRetryOnFailure())
+                );
+
+                services.AddScoped(db =>
+                {
+                    var connection = new SqlConnection(Configuration["ConnectionString:QuizzSqlAzure"]);
+                    connection.Open();
+                    return connection;
+                });
+
+            }
+
 
 
             services.AddTransient(typeof(IGenericDapperRepository<>), typeof(GenericDapperRepository<>));
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Exp Forestiere Service ",
-                     Description ="RestFull Api Administration Service",
-                    Version = "v1" ,
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Exp Forestiere Service ",
+                    Description = "RestFull Api Administration Service",
+                    Version = "v1",
                     TermsOfService = new Uri("https://ex.com/terms"),
                     Contact = new OpenApiContact
                     {
@@ -102,10 +117,12 @@ namespace Exfob1
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => {
+                app.UseSwaggerUI(c =>
+                {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expploitation Forestiere Service REst Administration v1");
                     c.RoutePrefix = string.Empty;
-                }) ;
+
+                });
             }
 
             app.UseHttpsRedirection();

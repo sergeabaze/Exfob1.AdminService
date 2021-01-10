@@ -322,7 +322,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             Assert.NotNull(result.Langue);
             Assert.NotNull(result.SiteOperation);
             Assert.NotNull(result.SiteOperation.Societe);
-            Assert.NotNull(result.SiteOperationsAuthoriser);
+            Assert.NotNull(result.SiteOperationsAuthorises);
             
         }
 
@@ -340,7 +340,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             Assert.NotNull(result.Langue);
             Assert.NotNull(result.SiteOperation);
             Assert.NotNull(result.SiteOperation.Societe);
-            Assert.Null(result.SiteOperationsAuthoriser);
+            Assert.Null(result.SiteOperationsAuthorises);
 
         }
 
@@ -358,7 +358,7 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             Assert.NotNull(result.Langue);
             Assert.NotNull(result.SiteOperation);
             Assert.NotNull(result.SiteOperation.Societe);
-            Assert.Null(result.SiteOperationsAuthoriser);
+            Assert.Null(result.SiteOperationsAuthorises);
 
         }
 

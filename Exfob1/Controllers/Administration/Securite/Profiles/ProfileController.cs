@@ -48,7 +48,7 @@ namespace Exfob1.Controllers.Administration.Securite.Profiles
         /// <returns>retourne objet</returns>
         /// <response code="200">Si retourne un objet </response>
         /// <response code="404">Si le lobjet nexiste pas</response>
-        [HttpGet("id/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<WebApiSingleResponse<ProfileResponse>>> obtenireParIdAsync(int id)
         {

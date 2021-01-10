@@ -108,9 +108,42 @@ SELECT * FROM SiteOperation WHERE SocieteID =@societeId;
 
         public async Task<IEnumerable<Utilisateur>> GetListe(int siteOperationid)
         {
+
             object parameters = new { SiteOperationID = siteOperationid };
-            string query = "SELECT * FROM [Utilisateur] WHERE SiteOperationID=@SiteOperationID";
-            return await this.GetDataAsync(query, parameters);
+            var param = new DynamicParameters();
+            param.Add("@SiteOperationID", siteOperationid);
+
+            string query = @"SELECT * FROM [Utilisateur] WHERE SiteOperationID=@SiteOperationID;
+SELECT * FROM Profil ;
+SELECT * FROM Langue ;
+";
+            var dataset = await this.GetAllMultiAsync(query, param);
+            var users = dataset.Read<Utilisateur>();
+            var profiles = dataset.Read<Profil>();
+            var langues = dataset.Read<Langue>();
+            if (users != null)
+            {
+                foreach (var user in users)
+                {
+                    if (user.LangueID.HasValue)
+                    {
+                        var langue = langues.FirstOrDefault(x => x.LangueID == user.LangueID);
+                        if (langue != null)
+                            user.Langue = langue;
+                    }
+
+                    if (user.ProfilID > 0)
+                    {
+                        var profile = profiles.FirstOrDefault(x => x.ProfilID == user.ProfilID);
+                        user.Profil = profile;
+                    }
+
+                }
+
+            }
+
+
+            return users;
         }
 
         public async Task<int> Creation(Utilisateur entity)
@@ -289,12 +322,13 @@ SELECT sa.SiteAutoriseID,
 	  WHERE sa.UtilisateurID=@UtilisateurID;
 select distinct SiteAutoriseID,ProfilAutoriseID,ProfileAuthoriser as ProfilAutorise,SiteOperationID,code, Libelle,Adresse from #TMP_SITEAUTH;
 select distinct ProfilAutoriseID as ProfilAutoriseID,ProfileAuthoriser as Libelle from #TMP_SITEAUTH;
- select * from #TMP_SITEAUTH
+SELECT * FROM Module;
+ select * from #TMP_SITEAUTH;
 SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
 	   WHERE SiegeID  =(select top(1) SiegeID  from #TMP_SITEOPS);
  	  
 ";
-            if(user != null)
+            if (user != null)
             {
                 entitty = new UtilisateurLoginModel();
 
@@ -306,7 +340,21 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
                 var dataset = await this.GetAllMultiAsync(queries, param);
                 entitty = MappeUser(dataset, user);
             }
-            
+            //UPDATE Utilisateur SET dateconnection=Getdate() Where UtilisateurID =(select top(1) UtilisateurID from #TMP_USER) 
+
+            string updateQuery = $@" UPDATE [Utilisateur] SET
+     [dateconnection] = @{nameof(Utilisateur.DateConnection)}
+     WHERE UtilisateurID=@{nameof(Utilisateur.UtilisateurID)}
+      ";
+
+            object inParameters = new
+            {
+                entitty.UtilisateurID,
+                DateConnection = DateTime.Now,
+
+            };
+
+            await this.UpdateWithScriptAsync(updateQuery, inParameters);
             return entitty;
         }
         #endregion
@@ -322,7 +370,9 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
             var _droits = dataset.Read<Droit>();
             var _siteauths = dataset.Read<SiteOperationsAuthorizerLoginModel>();
             var _profleauthzs = dataset.Read<ProfileAuthorizerLoginModel>();
-            //var entity = dataset.ReadSingle<Utilisateur>();
+            var _modules = dataset.Read<Module>();
+            var _alldatas = dataset.Read<SiteAthurizedAll>();
+
             if (entity != null)
             {
                 model = new UtilisateurLoginModel
@@ -335,10 +385,11 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
                     LoginUtilisateur = entity.LoginUtilisateur,
                     Nom = entity.Nom,
                     SiteOperationID = entity.SiteOperationID.Value,
-                    Profile = Mappprofile(_profile, _droits),
+                    Profile = Mappprofile(_profile, _droits, _modules),
                     Langue = MapppLangue(_langue),
                     SiteOperation = MapppSiteOperation(_siteops, _societe),
-                    SiteOperationsAuthoriser = MapppSiteAuthorizer(_siteauths, _profleauthzs)
+                    SiteOperationsAuthorises = MapppSiteAuthorizer(_siteauths, _profleauthzs, _alldatas, _modules)
+
                 };
 
             }
@@ -348,7 +399,7 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
 
         }
 
-        private ProfileLoginModel Mappprofile(Profil entity, IEnumerable<Droit> entities)
+        private ProfileLoginModel Mappprofile(Profil entity, IEnumerable<Droit> entities, IEnumerable<Module> modules)
         {
             ProfileLoginModel model = null;
             //var entity = dataset.ReadSingle<Profil>();
@@ -358,14 +409,14 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
                 {
                     ProfilID = entity.ProfilID,
                     Libelle = entity.Libelle,
-                    Droits = MapppDroits(entities)
+                    Droits = MapppDroits(entities, modules)
                 };
 
             }
             return model;
         }
 
-        private List<DroitsLoginModel> MapppDroits(IEnumerable<Droit> entity)
+        private List<DroitsLoginModel> MapppDroits(IEnumerable<Droit> entity, IEnumerable<Module> modules)
         {
             List<DroitsLoginModel> model = null;
             //var entity = dataset.Read<Droit>();
@@ -381,10 +432,21 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
                     Modifier = x.Modifier,
                     ModuleID = x.ModuleID,
                     ProfilID = x.ProfilID,
-                    Suppression = x.Suppression
+                    Suppression = x.Suppression,
+                    Module = GetModule(modules, x.ModuleID)
                 }));
             }
             return model;
+        }
+
+        ModuleLoginModel GetModule(IEnumerable<Module> modules, int ModuleID)
+        {
+            var module = modules.FirstOrDefault(x => x.ModuleID == ModuleID);
+            if (module != null)
+            {
+                return new ModuleLoginModel { ModuleID = module.ModuleID, Libelle = module.Libelle, ModuleParentID = module.ModuleParentID };
+            }
+            return null;
         }
 
         private LangueLoginModel MapppLangue(Langue entity)
@@ -463,7 +525,10 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
 
         private List<SiteOperationsAuthorizerLoginModel> MapppSiteAuthorizer(
             IEnumerable<SiteOperationsAuthorizerLoginModel> entity,
-            IEnumerable<ProfileAuthorizerLoginModel> profiles)
+            IEnumerable<ProfileAuthorizerLoginModel> profiles,
+             IEnumerable<SiteAthurizedAll> siteauthall,
+              IEnumerable<Module> modules
+            )
         {
             List<SiteOperationsAuthorizerLoginModel> models = null;
             // var entity = dataset.ReadSingle<Siege>();
@@ -478,12 +543,88 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
                     Code = x.Code,
                     Libelle = x.Libelle,
                     Adresse = x.Adresse,
-                    Profile = profiles.FirstOrDefault(y => y.ProfilAutoriseID == x.ProfilAutoriseID)
+                    Profile = MappProfileAuth(profiles, x.ProfilAutoriseID, siteauthall, modules, x.SiteAutoriseID)
+
                 }));
             }
             return models;
         }
+
+        ProfileAuthorizerLoginModel MappProfileAuth(IEnumerable<ProfileAuthorizerLoginModel> profiles, int ProfilAutoriseID,
+            IEnumerable<SiteAthurizedAll> siteauthall,
+             IEnumerable<Module> modules, int SiteAutoriseID)
+        {
+            var profile = profiles.FirstOrDefault(y => y.ProfilAutoriseID == ProfilAutoriseID);
+            profile.DroitsAuthoriser = MapppDroitsAuthorizes(siteauthall, modules, SiteAutoriseID);
+            return profile;
+        }
+        //.DroitsAuthoriser= MapppDroitsAuthorizes(siteauthall, modules)
+        private List<DroitsAuthorizerLoginModel> MapppDroitsAuthorizes(IEnumerable<SiteAthurizedAll> entity, IEnumerable<Module> modules
+            , int SiteAutoriseID)
+        {
+            List<DroitsAuthorizerLoginModel> model = null;
+            if (entity.Any())
+            {
+                model = new List<DroitsAuthorizerLoginModel>();
+                var query = from x in entity
+                            where x.SiteAutoriseID == SiteAutoriseID
+                            select new DroitsAuthorizerLoginModel
+                            {
+                                DroitAutoriseID = x.DroitAutoriseID,
+                                Ecriture = x.Ecriture,
+                                Impression = x.Impression,
+                                Lecture = x.Lecture,
+                                Modifier = x.Modifier,
+                                ModuleID = x.ModuleID,
+                                ProfilAutoriseID = x.ProfilAutoriseID,
+                                Suppression = x.Suppression,
+                                ModuleLibelle = GetModuleAutho(modules, x.ModuleID)
+                            };
+
+                model.AddRange(query);
+            }
+            return model;
+        }
+
+        string GetModuleAutho(IEnumerable<Module> modules, int ModuleID)
+        {
+            var module = modules.FirstOrDefault(x => x.ModuleID == ModuleID);
+            if (module != null)
+            {
+                return module.Libelle ;
+            }
+            return null;
+        }
         #endregion
+
+    }
+
+    public class SiteAthurizedAll
+    {
+        public int SiteAutoriseID { get; set; }
+        public int UtilisateurID { get; set; }
+        public string ProfilAutorise { get; set; }
+        public string Code { get; set; }
+        public string Libelle { get; set; }
+        public string Adresse { get; set; }
+        public int SiteOperationID { get; set; }
+        public int DroitAutoriseID { get; set; }
+
+        public int ProfilAutoriseID { get; set; }
+
+        public int ModuleID { get; set; }
+
+        public bool Ecriture { get; set; }
+
+        public bool Lecture { get; set; }
+
+        public bool Modifier { get; set; }
+
+        public bool Suppression { get; set; }
+
+        public bool Impression { get; set; }
+
+        public string Module { get; set; }
 
     }
 }
