@@ -2,7 +2,6 @@
 using Exfob.Models.Administration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Exfob.Core.Interfaces.Administrations.Securites
 {
     public  interface ILangueRepository : IGenericRepository<Langue>

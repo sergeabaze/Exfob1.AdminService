@@ -9,6 +9,7 @@ namespace Exfob1.Models.Adminstrations.Utilisateurs.Request
         [Required(ErrorMessage = MessageValidations.Erreur100)]
         public string Nomutilisateur { get; set; }
         [Required(ErrorMessage = MessageValidations.Erreur100)]
+       // [Required(ErrorMessageResourceName = "Erreur100", ErrorMessageResourceType = typeof(ResourceMessage))]
         public string Motpasse { get; set; }
     }
 }

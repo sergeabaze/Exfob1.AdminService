@@ -1,4 +1,4 @@
-﻿using Exfob1.Models.Adminstrations.Profiles.Request;
+﻿using Exfob1.Models.Adminstrations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

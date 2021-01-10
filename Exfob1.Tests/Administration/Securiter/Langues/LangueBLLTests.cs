@@ -3,8 +3,8 @@ using AutoMapper;
 using Exfob.Core.Services.Administration;
 using Exfob.Models.Administration;
 using Exfob.Models.Fakes;
-using Exfob1.Controllers.Administration.Securite.Langues.BusinessLogic;
-using Exfob1.Models.Adminstrations.Langues.Response;
+using Exfob1.Controllers.Administration;
+using Exfob1.Models.Adminstrations;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +52,7 @@ namespace Exfob1.Tests.Administration.Securiter.Langues
             [Theory, UnitTestConventions]
             public async Task ObtenireParIdOnOkResult([Frozen] ILangueService service,
                 [Frozen] IMapper mapper, int id,
-                LangueReponse model,
+                Models.Adminstrations.LangueReponse model,
                 LangueBLL sut)
             {
                 //Arrang
@@ -67,7 +67,7 @@ namespace Exfob1.Tests.Administration.Securiter.Langues
                 _serviceMock.Setup(svce => svce.ObtenireLangueParId(It.IsAny<int>()))
                     .ReturnsAsync(entity);
 
-                mockMapper.Setup(x => x.Map<LangueReponse>(entity))
+                mockMapper.Setup(x => x.Map<Models.Adminstrations.LangueReponse>(entity))
                     .Returns(model);
 
                 //Act
@@ -82,7 +82,7 @@ namespace Exfob1.Tests.Administration.Securiter.Langues
             [Theory, UnitTestConventions]
             public async Task ObtenireParIdOnNotFound([Frozen] ILangueService service,
                [Frozen] IMapper mapper, int id,
-               LangueReponse model,
+               Models.Adminstrations.LangueReponse model,
                LangueBLL sut)
             {
                 //Arrang
@@ -97,7 +97,7 @@ namespace Exfob1.Tests.Administration.Securiter.Langues
                 _serviceMock.Setup(svce => svce.ObtenireLangueParId(It.IsAny<int>()))
                     .ReturnsAsync((Langue)null);
 
-                mockMapper.Setup(x => x.Map<LangueReponse>(entity))
+                mockMapper.Setup(x => x.Map<Models.Adminstrations.LangueReponse>(entity))
                     .Returns(model);
 
                 //Act

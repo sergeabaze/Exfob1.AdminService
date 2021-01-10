@@ -1,4 +1,4 @@
-﻿namespace Exfob1.Models.Adminstrations.Profiles.ResPonse
+﻿namespace Exfob1.Models.Adminstrations
 {
     public  class ProfileListe
     {

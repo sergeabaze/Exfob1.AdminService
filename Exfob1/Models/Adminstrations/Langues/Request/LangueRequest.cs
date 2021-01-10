@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
+using Exfob1.Communs;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace Exfob1.Models.Adminstrations.Langues.Request
+namespace Exfob1.Models.Adminstrations
 {
-   public  class LangueRequest
-    {
-        [Required]
-        public string Code { get; set; }
-
-        [Required]
-        public string Libelle { get; set; }
-    }
+	public  class LangueRequest
+	{
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
+		public string  Code { get; set; }
+		[Required(ErrorMessage = MessageValidations.Erreur100)]
+		public string  Libelle { get; set; }
+	}
 }

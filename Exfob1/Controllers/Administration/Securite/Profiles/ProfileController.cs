@@ -1,14 +1,11 @@
-﻿using Exfob1.Controllers.Administration.Securite.Langues.BusinessLogic;
-using Exfob1.Controllers.Administration.Securite.Profiles.BusinessLogic;
+﻿using Exfob1.Controllers.Administration.Securite.Profiles.BusinessLogic;
 using Exfob1.Conventions;
 using Exfob1.Models;
-using Exfob1.Models.Adminstrations.Profiles.Request;
-using Exfob1.Models.Adminstrations.Profiles.ResPonse;
+using Exfob1.Models.Adminstrations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
