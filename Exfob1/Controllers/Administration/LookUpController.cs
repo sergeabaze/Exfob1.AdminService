@@ -50,6 +50,8 @@ namespace Exfob1.Controllers.Administration
                 response.ErrorMessage = ResourceMessage.ErrurNotFound;
 
             }
+
+            _logger.LogInformation("Chargement acconierlists");
             return response.ToHttpResponse();
         }
 
@@ -79,6 +81,7 @@ namespace Exfob1.Controllers.Administration
                 response.ErrorMessage = ResourceMessage.ErrurNotFound;
 
             }
+            _logger.LogInformation("Chargement soustraitancelists");
             return response.ToHttpResponse();
         }
 
@@ -108,6 +111,7 @@ namespace Exfob1.Controllers.Administration
                 response.ErrorMessage = ResourceMessage.ErrurNotFound;
 
             }
+            _logger.LogInformation("Chargement droitsutilisateurlists");
             return response.ToHttpResponse();
         }
 
@@ -284,5 +288,91 @@ namespace Exfob1.Controllers.Administration
             return response.ToHttpResponse();
         }
 
+        /// <summary>
+        /// liste Essences
+        /// </summary>
+        /// <param name="societeid">societe id</param>
+        /// <returns>retourne collection</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("essencesparsociete/{societeid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiListResponse<EssenceForListe>>> EssenceListeAsync(int societeid)
+        {
+            var response = new WebApiListResponse<EssenceForListe>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            response.Model = await _repository.GetEssenceListe(societeid)
+               .ConfigureAwait(false);
+            if (!response.Model.Any())
+            {
+                response.CodeMessage = StatusCodes.Status404NotFound;
+                response.IsError = true;
+                response.ErrorMessage = ResourceMessage.ErrurNotFound;
+
+            }
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// liste operateur par site peration
+        /// </summary>
+        /// <param name="siteOperationid">site ops</param>
+        /// <returns>retourne collection</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("operateursparsiteoperation/{siteOperationid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiListResponse<OperateurForListe>>> OperateursListeAsync(int siteOperationid)
+        {
+            var response = new WebApiListResponse<OperateurForListe>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            response.Model = await _repository.GetOperateurListe(siteOperationid)
+               .ConfigureAwait(false);
+            if (!response.Model.Any())
+            {
+                response.CodeMessage = StatusCodes.Status404NotFound;
+                response.IsError = true;
+                response.ErrorMessage = ResourceMessage.ErrurNotFound;
+
+            }
+            return response.ToHttpResponse();
+        }
+
+        /// <summary>
+        /// liste chantier par site operation
+        /// </summary>
+        /// <param name="siteOperationid">site ops</param>
+        /// <returns>retourne collection</returns>
+        /// <response code="200">Si retourne un objet </response>
+        /// <response code="404">Si le lobjet nexiste pas</response>
+        [HttpGet("chantiersparsiteoperation/{siteOperationid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WebApiListResponse<ChantierForListe>>> ChantiersListeAsync(int siteOperationid)
+        {
+            var response = new WebApiListResponse<ChantierForListe>
+            {
+                CodeMessage = StatusCodes.Status200OK,
+                IsError = false,
+            };
+
+            response.Model = await _repository.GetChantierListe(siteOperationid)
+               .ConfigureAwait(false);
+            if (!response.Model.Any())
+            {
+                response.CodeMessage = StatusCodes.Status404NotFound;
+                response.IsError = true;
+                response.ErrorMessage = ResourceMessage.ErrurNotFound;
+
+            }
+            return response.ToHttpResponse();
+        }
     }
 }

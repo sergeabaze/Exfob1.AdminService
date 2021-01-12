@@ -18,5 +18,8 @@ namespace Exfob.Core.Interfaces.Administrations
         Task<IEnumerable<SouTraitanceForListe>> GetSousTraitanceListe(int SiteOperationID);
         Task<IEnumerable<DroitsForListe>> GetDroitListe(int ProfileID);
         Task<IEnumerable<SiteAutoriseForListe>> GetSiteAutoriseListe(int UtilisateurID);
+        Task<IEnumerable<EssenceForListe>> GetEssenceListe(int SocieteID);
+        Task<IEnumerable<OperateurForListe>> GetOperateurListe(int SiteOperationID);
+        Task<IEnumerable<ChantierForListe>> GetChantierListe(int SiteOperationID);
     }
 }

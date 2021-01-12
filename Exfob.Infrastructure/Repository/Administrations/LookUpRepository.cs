@@ -13,7 +13,7 @@ namespace Exfob.Infrastructure.Repository.Administrations
 {
     public class LookUpRepository : GenericDapperRepository<LookUpModel>, ILookUpRepository
     {
-        private IDbConnection _connection;
+        private readonly  IDbConnection _connection;
         public LookUpRepository(DbConnection context)
            : base(context)
         {
@@ -26,6 +26,14 @@ namespace Exfob.Infrastructure.Repository.Administrations
            return result;
         }
 
+        public async  Task<IEnumerable<ChantierForListe>> GetChantierListe(int SiteOperationID)
+        {
+            string query = @"select ChantierID, CodeChantier, Libelle from Chantier  
+  WHERE SiteOperationID =@SiteOperationID";
+            var result = await _connection.QueryAsync<ChantierForListe>(query, new { SiteOperationID });
+            return result;
+        }
+
         public async  Task<IEnumerable<DroitsForListe>> GetDroitListe(int ProfileID)
         {
             string query = @"Select Droit.*, md.Libelle as Module from Droit inner join Module md
@@ -35,10 +43,32 @@ namespace Exfob.Infrastructure.Repository.Administrations
             return result;
         }
 
+        public async  Task<IEnumerable<EssenceForListe>> GetEssenceListe(int SocieteID)
+        {
+            string query = @"select essence.EssenceID,essence.Code,essence.Libelle ,cle.Libelle as ClasseEssence , cat.Libelle as CategorieEssence
+  from essence inner join ClasseEssence cle 
+  on cle.ClasseEssenceID = essence.ClasseEssenceID inner join CategorieEssence cat
+  on cat.CategorieEssenceID = essence.CategorieEssenceID
+  where essence.SocieteID =@SocieteID";
+            var result = await _connection.QueryAsync<EssenceForListe>(query, new { SocieteID });
+            return result;
+        }
+
         public async  Task<IEnumerable<Langue>> GetLangueListe()
         {
             string query = "SELECT * FROM Langue;";
             var result = await _connection.QueryAsync<Langue>(query);
+            return result;
+        }
+
+        public async  Task<IEnumerable<OperateurForListe>> GetOperateurListe(int SiteOperationID)
+        {
+            string query = @"select OperateurID ,Code ,Operateur.Libelle, tp.Libelle as TypeOperateur   
+  from Operateur inner join TypeOperateur tp 
+  on tp.TypeOperateurID = tp.TypeOperateurID 
+  WHERE SiteOperationID =@SiteOperationID
+  order by tp.TypeOperateurID";
+      var result = await _connection.QueryAsync<OperateurForListe>(query, new { SiteOperationID });
             return result;
         }
 
