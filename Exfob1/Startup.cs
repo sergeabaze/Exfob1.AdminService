@@ -56,13 +56,13 @@ namespace Exfob1
             if (_env.IsDevelopment())
             {
                 services.AddDbContext<GestionBoisContext>(opts =>
-                 opts.UseSqlServer(Configuration["ConnectionString:exfobDevDb"],
+                 opts.UseSqlServer(Configuration["ConnectionString:QuizzSqlAzure_dev"],
                  providerOptions => providerOptions.EnableRetryOnFailure())
                  );
 
                 services.AddScoped(db =>
                 {
-                    var connection = new SqlConnection(Configuration["ConnectionString:exfobDevDb"]);
+                    var connection = new SqlConnection(Configuration["ConnectionString:QuizzSqlAzure_dev"]);
                     connection.Open();
                     return connection;
                 });
@@ -71,13 +71,13 @@ namespace Exfob1
             else
             {
                 services.AddDbContext<GestionBoisContext>(opts =>
-                  opts.UseSqlServer(Configuration["ConnectionString:exfobDevDbSqlAzure"],
+                  opts.UseSqlServer(Configuration["ConnectionString:QuizzSqlAzure_dev"],
                   providerOptions => providerOptions.EnableRetryOnFailure())
                 );
 
                 services.AddScoped(db =>
                 {
-                    var connection = new SqlConnection(Configuration["ConnectionString:exfobDevDbSqlAzure"]);
+                    var connection = new SqlConnection(Configuration["ConnectionString:QuizzSqlAzure_dev"]);
                     connection.Open();
                     return connection;
                 });

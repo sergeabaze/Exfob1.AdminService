@@ -30,20 +30,20 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
             _repository1 = new UtilisateurRepository(Fixture._connection);
 
             //using (var context = Fixture.CreateContext())
-           // {
-              //  _repository = new GenericRepository<Utilisateur>(context);
+            // {
+            //  _repository = new GenericRepository<Utilisateur>(context);
 
-                //Arrange
+            //Arrange
 
-                var result = await _repository1.GetAllAsync();
+            var result = await _repository1.GetAllAsync();
 
-                //Assert
-                Assert.True(result.Any());
-                Assert.Equal(expected, result.ToList().Count);
-                Assert.Null(result.First().Profil);
-                Assert.Null(result.First().Langue);
-                Assert.Null(result.First().SiteOperation);
-           // }
+            //Assert
+            Assert.True(result.Any());
+            Assert.Equal(expected, result.ToList().Count);
+            Assert.Null(result.First().Profil);
+            Assert.Null(result.First().Langue);
+            Assert.Null(result.First().SiteOperation);
+            // }
         }
 
         [Fact]
@@ -301,13 +301,13 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
         {
             var projectDir = Directory.GetCurrentDirectory();
             var configPath = Path.Combine(projectDir, "appsettings.json");
-            var Connectiongg = new SqlConnection(@"data source=CA-L7KB0VN2\SQLEXPRESS;initial catalog=GBRWBD061915;integrated security=True;MultipleActiveResultSets=True;Max Pool Size=500;");
+            var Connectiongg = new SqlConnection(@"server=tcp:exfob.database.windows.net,1433;Initial Catalog=GBRWBD061915;Persist Security Info=False;User ID=exfobuser;Password=@Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30");
             Connectiongg.Open();
             _repository = new UtilisateurRepository(Connectiongg);
         }
 
-        
-        [Fact(Skip = "non pris en compte")]
+
+        [Fact]
         public async Task LogginAsync_WIth_AuthorizedSitedShould_Return_Object()
         {
 
@@ -316,14 +316,14 @@ namespace Exfob.Infrastructure.Tests.EntityFramWOrkRepository.InMemory.Administr
 
             //Assert
             Assert.NotNull(result);
-           Assert.Equal("admin.admin", result.LoginUtilisateur);
+            Assert.Equal("admin.admin", result.LoginUtilisateur);
             Assert.NotNull(result.Profile);
             Assert.NotNull(result.Profile.Droits);
             Assert.NotNull(result.Langue);
             Assert.NotNull(result.SiteOperation);
             Assert.NotNull(result.SiteOperation.Societe);
             Assert.NotNull(result.SiteOperationsAuthorises);
-            
+
         }
 
         [Fact(Skip = "non pris en compte")]
