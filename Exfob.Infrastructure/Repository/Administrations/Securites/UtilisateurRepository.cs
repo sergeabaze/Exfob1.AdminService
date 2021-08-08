@@ -354,7 +354,7 @@ SELECT SiegeID,GroupeID,Code,Libelle FROM Siege
 
             };
 
-            await this.UpdateWithScriptAsync(updateQuery, inParameters);
+           // await this.UpdateWithScriptAsync(updateQuery, inParameters);
             return entitty;
         }
         #endregion
