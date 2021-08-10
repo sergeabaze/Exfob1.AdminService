@@ -114,16 +114,22 @@ namespace Exfob1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expploitation Forestiere Service REst Administration v1");
-                    c.RoutePrefix = string.Empty;
 
-                });
             }
-           
-           
+            // app.UseSwagger();
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exp Forestiere Service REST Admin v1");
+                c.RoutePrefix = string.Empty;
+                c.InjectStylesheet("/swagger-ui/custom.css");
+
+            });
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -134,7 +140,7 @@ namespace Exfob1
             {
                 endpoints.MapControllers();
             });
-           
+
         }
     }
 }
